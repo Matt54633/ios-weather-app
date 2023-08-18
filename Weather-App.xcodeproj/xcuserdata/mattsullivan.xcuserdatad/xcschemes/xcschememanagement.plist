@@ -4,10 +4,33 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Select Location WidgetExtension.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
 		<key>Weather-App.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
+		</dict>
+		<key>WidgetsExtension.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>76506B2C2A863E8F0051AC30</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>765644242A7BBE840098F265</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>
