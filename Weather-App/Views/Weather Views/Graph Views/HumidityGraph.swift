@@ -29,7 +29,6 @@ struct HumidityGraph: View {
         }
         .modifier(GlassCard())
     }
-    
 }
 
 //#Preview {

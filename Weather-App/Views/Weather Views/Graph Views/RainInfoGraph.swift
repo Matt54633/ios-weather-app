@@ -11,32 +11,27 @@ struct RainInfoGraph: View {
                 Image(systemName: "cloud.rain.fill")
                 Text("Rainfall")
             }
+            Spacer()
             Text((hourData?.precipitationAmount.value ?? dayData?.precipitationAmount.value)! > 0 ? "\((hourData?.precipitationAmount.value ?? dayData?.precipitationAmount.value)?.formatted() ?? "") mm" : "")
                 .font(.system(size: 44))
                 .fontWeight(.semibold)
-            Spacer()
             if (hourData?.precipitationAmount.value ?? dayData?.precipitationAmount.value)! <= 0 {
                 Gauge(value: ((hourData?.precipitationChance ?? dayData?.precipitationChance) ?? 0) * 100, in: 0.0...100.0) {
-                    Text("%")
-                        .foregroundStyle(.white)
+                    Image(systemName: "gauge.medium")
+                        .font(.system(size: 50.0))
                 } currentValueLabel: {
-                    Text("\((Int((hourData?.precipitationChance ?? dayData?.precipitationChance) ?? 0) * 100))")
-                        .foregroundStyle(.white)
+                    Text("\((Int((hourData?.precipitationChance ?? dayData?.precipitationChance ?? 0) * 100)))")
                 }
-                .scaleEffect(1.6)
-                .frame(maxWidth: .infinity)
-                .gaugeStyle(.accessoryCircular)
-                .tint(LinearGradient(gradient: Gradient(colors: [.mint, .cyan]), startPoint: .leading, endPoint: .trailing))
-                Spacer()
+                .gaugeStyle(RainGaugeStyle())
             }
-            Text((hourData?.precipitationAmount.value ?? dayData?.precipitationAmount.value)! > 0 ? "Amount of rain" : "Chance of rain")
+            Spacer()
+            Text("\(hourData?.precipitationAmount.value ?? dayData?.precipitationAmount.value ?? 0 > 0 ? "Amount of rain" : "Chance of rain")" + "\((hourData != nil ? " for the hour" : " for the day"))")
                 .font(.system(size: 14))
         }
         .modifier(GlassCard())
         .modifier(SymbolFill())
     }
 }
-
 
 //#Preview {
 //    RainInfoGraph()

@@ -10,7 +10,7 @@ import WeatherKit
 
 struct DayView: View {
     @Environment(\.horizontalSizeClass) var sizeClass
-    let dayData: Slice<Forecast<DayWeather>>.Element
+    let dayData: Forecast<DayWeather>.Element
     
     var body: some View {
         ZStack(alignment: .leading) {
@@ -20,8 +20,10 @@ struct DayView: View {
                     Spacer()
                     VStack(alignment: .leading) {
                         HStack() {
-                            Text("\(dayData.date.formatted(.dateTime.weekday(.wide))), \(dayData.date.formatted(.dateTime.day())) \(dayData.date.formatted(.dateTime.month()))")
-                                .font(.largeTitle)
+                            Text(dayData.date.formatted(.dateTime.weekday(.wide)) + ", " +
+                                 dayData.date.formatted(.dateTime.day()) + " " +
+                                 dayData.date.formatted(.dateTime.month()))
+                            .font(.largeTitle)
                             Spacer()
                             Image(systemName: dayData.symbolName)
                                 .font(.title)
@@ -30,50 +32,14 @@ struct DayView: View {
                         Text(dayData.condition.description)
                     }
                     .padding(.bottom, 20)
-                    VStack(alignment: .leading) {
-                        Text("\(dayData.highTemperature.value.rounded(.toNearestOrEven).formatted())°")
-                            .font(.system(size: 64))
-                        Text("\(dayData.lowTemperature.value.rounded(.toNearestOrEven).formatted())°")
-                            .font(.system(size: 40))
-                    }
-                    .fontWeight(.semibold)
-                    HStack {
-                        Group {
-                            HStack {
-                                Image(systemName: "sunrise.fill")
-                                Text("\(dayData.sun.sunrise!.formatted(date: .omitted, time: .shortened))")
-                            }
-                            .help("Sunrise")
-                            HStack {
-                                Image(systemName: "sunset.fill")
-                                Text("\(dayData.sun.sunset!.formatted(date: .omitted, time: .shortened))")
-                            }
-                            .help("Sunset")
-                        }
-                        .padding(10)
-                        .background(Color("Transparent"))
-                        .clipShape(RoundedRectangle(cornerRadius:20))
-                        .shadow(radius: 5)
-                    }
+                    TemperatureView(highTemperature: dayData.highTemperature.value,
+                                    lowTemperature: dayData.lowTemperature.value)
+                    SunriseSunsetView(sunrise: dayData.sun.sunrise, sunset: dayData.sun.sunset)
                     Spacer(minLength: 40)
                     if sizeClass == .compact {
-                        HStack {
-                            WindGraph(hourData: nil, dayData: dayData)
-                            Spacer(minLength: 20)
-                            RainInfoGraph(hourData: nil, dayData: dayData)
-                        }
-                        Spacer(minLength: 20)
-                        HStack {
-                            UVGraph(hourData: nil, dayData: dayData)
-                        }
+                        CompactGraphs(dayData: dayData)
                     } else {
-                        HStack {
-                            WindGraph(hourData: nil, dayData: dayData)
-                            Spacer(minLength: 20)
-                            RainInfoGraph(hourData: nil, dayData: dayData)
-                            Spacer(minLength: 20)
-                            UVGraph(hourData: nil, dayData: dayData)
-                        }
+                        RegularGraphs(dayData: dayData)
                     }
                 }
             }
@@ -85,8 +51,73 @@ struct DayView: View {
     }
 }
 
-//struct DayView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        DayView()
-//    }
-//}
+private struct CompactGraphs: View {
+    let dayData: Forecast<DayWeather>.Element
+    
+    var body: some View {
+        HStack {
+            WindGraph(hourData: nil, dayData: dayData)
+            Spacer(minLength: 20)
+            RainInfoGraph(hourData: nil, dayData: dayData)
+        }
+        Spacer(minLength: 20)
+        HStack {
+            UVGraph(hourData: nil, dayData: dayData)
+        }
+    }
+}
+
+private struct RegularGraphs: View {
+    let dayData: Forecast<DayWeather>.Element
+    
+    var body: some View {
+        HStack {
+            WindGraph(hourData: nil, dayData: dayData)
+            Spacer(minLength: 20)
+            RainInfoGraph(hourData: nil, dayData: dayData)
+            Spacer(minLength: 20)
+            UVGraph(hourData: nil, dayData: dayData)
+        }
+    }
+}
+
+private struct TemperatureView: View {
+    let highTemperature: Double
+    let lowTemperature: Double
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text("\(highTemperature.rounded(.toNearestOrEven).formatted())°")
+                .font(.system(size: 64))
+            Text("\(lowTemperature.rounded(.toNearestOrEven).formatted())°")
+                .font(.system(size: 40))
+        }
+        .fontWeight(.semibold)
+    }
+}
+
+private struct SunriseSunsetView: View {
+    let sunrise: Date?
+    let sunset: Date?
+    
+    var body: some View {
+        HStack {
+            Group {
+                HStack {
+                    Image(systemName: "sunrise.fill")
+                    Text(sunrise?.formatted(date: .omitted, time: .shortened) ?? "")
+                }
+                .help("Sunrise")
+                HStack {
+                    Image(systemName: "sunset.fill")
+                    Text(sunset?.formatted(date: .omitted, time: .shortened) ?? "")
+                }
+                .help("Sunset")
+            }
+            .padding(10)
+            .background(Color("Transparent"))
+            .clipShape(RoundedRectangle(cornerRadius:20))
+            .shadow(radius: 5)
+        }
+    }
+}

@@ -241,7 +241,7 @@
 		765644362A7BBF4B0098F265 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				765644552A7C4DF90098F265 /* Helper Views */,
+				765644552A7C4DF90098F265 /* Style Views */,
 				76659BAE2A8B726C00CCAFC3 /* Map Views */,
 				765644542A7C4DE10098F265 /* Navigation Views */,
 				765644532A7C4DCB0098F265 /* Weather Views */,
@@ -283,12 +283,12 @@
 			path = "Navigation Views";
 			sourceTree = "<group>";
 		};
-		765644552A7C4DF90098F265 /* Helper Views */ = {
+		765644552A7C4DF90098F265 /* Style Views */ = {
 			isa = PBXGroup;
 			children = (
 				7656443A2A7BC5F80098F265 /* Background.swift */,
 			);
-			path = "Helper Views";
+			path = "Style Views";
 			sourceTree = "<group>";
 		};
 		76596E792A94C49A00E00BCC /* Custom Styles */ = {

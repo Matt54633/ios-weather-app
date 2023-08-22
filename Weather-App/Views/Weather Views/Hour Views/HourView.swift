@@ -10,8 +10,8 @@ import WeatherKit
 
 struct HourView: View {
     @Environment(\.horizontalSizeClass) var sizeClass
-    let hourData: Slice<Forecast<HourWeather>>.Element
-
+    let hourData: Forecast<HourWeather>.Element
+    
     var body: some View {
         ZStack(alignment: .leading) {
             Background()
@@ -19,7 +19,7 @@ struct HourView: View {
                 VStack(alignment: .leading) {
                     Spacer()
                     VStack(alignment: .leading) {
-                        HStack() {
+                        HStack {
                             Text(DateFormatter.localizedString(from: hourData.date, dateStyle: .none, timeStyle: .short))
                                 .font(.largeTitle)
                             Spacer()
@@ -34,40 +34,11 @@ struct HourView: View {
                         .font(.system(size: 64))
                         .fontWeight(.semibold)
                         .padding(.bottom, 35)
+                    
                     if sizeClass == .compact {
-                        HStack {
-                            WindGraph(hourData: hourData, dayData: nil)
-                            Spacer(minLength: 20)
-                            RainInfoGraph(hourData: hourData, dayData: nil)
-                        }
-                        Spacer(minLength: 20)
-                        HStack {
-                            UVGraph(hourData: hourData, dayData: nil)
-                            Spacer(minLength: 20)
-                            VisibilityGraph(hourData: hourData)
-                        }
-                        Spacer(minLength: 20)
-                        HStack {
-                            FeelsLikeGraph(hourData: hourData)
-                            Spacer(minLength: 20)
-                            HumidityGraph(hourData: hourData)
-                        }
+                        CompactGraphs(hourData: hourData)
                     } else {
-                        HStack {
-                            WindGraph(hourData: hourData, dayData: nil)
-                            Spacer(minLength: 20)
-                            RainInfoGraph(hourData: hourData, dayData: nil)
-                            Spacer(minLength: 20)
-                            UVGraph(hourData: hourData, dayData: nil)
-                        }
-                        Spacer(minLength: 20)
-                        HStack {
-                            VisibilityGraph(hourData: hourData)
-                            Spacer(minLength: 20)
-                            FeelsLikeGraph(hourData: hourData)
-                            Spacer(minLength: 20)
-                            HumidityGraph(hourData: hourData)
-                        }
+                        RegularGraphs(hourData: hourData)
                     }
                 }
                 .toolbarBackground(.hidden, for: .navigationBar)
@@ -79,8 +50,54 @@ struct HourView: View {
     }
 }
 
+private struct CompactGraphs: View {
+    let hourData: Forecast<HourWeather>.Element
+    
+    var body: some View {
+        HStack {
+            WindGraph(hourData: hourData, dayData: nil)
+            Spacer(minLength: 20)
+            RainInfoGraph(hourData: hourData, dayData: nil)
+        }
+        Spacer(minLength: 20)
+        HStack {
+            UVGraph(hourData: hourData, dayData: nil)
+            Spacer(minLength: 20)
+            VisibilityGraph(hourData: hourData)
+        }
+        Spacer(minLength: 20)
+        HStack {
+            FeelsLikeGraph(hourData: hourData)
+            Spacer(minLength: 20)
+            HumidityGraph(hourData: hourData)
+        }
+    }
+}
+
+private struct RegularGraphs: View {
+    let hourData: Forecast<HourWeather>.Element
+    
+    var body: some View {
+        HStack {
+            WindGraph(hourData: hourData, dayData: nil)
+            Spacer(minLength: 20)
+            RainInfoGraph(hourData: hourData, dayData: nil)
+            Spacer(minLength: 20)
+            UVGraph(hourData: hourData, dayData: nil)
+        }
+        Spacer(minLength: 20)
+        HStack {
+            VisibilityGraph(hourData: hourData)
+            Spacer(minLength: 20)
+            FeelsLikeGraph(hourData: hourData)
+            Spacer(minLength: 20)
+            HumidityGraph(hourData: hourData)
+        }
+    }
+}
+
 //struct HourView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        HourView()
+//        HourView(hourData: Forecast<HourWeather>.Element(date: Date(), temperature: Measurement(value: 20, unit: .celsius), symbolName: "sun.max.fill", condition: .clear))
 //    }
 //}

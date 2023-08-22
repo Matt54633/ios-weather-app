@@ -13,7 +13,8 @@ struct WeatherAttribution: View {
     
     var body: some View {
         VStack {
-            if let attributionLogo = weatherDataHelper.attributionLogo {
+            if let attributionLogo = weatherDataHelper.attributionLogo,
+               let attributionURL = weatherDataHelper.attributionURL {
                 AsyncImage(url: attributionLogo) { image in
                     image
                         .resizable()
@@ -22,13 +23,11 @@ struct WeatherAttribution: View {
                 } placeholder: {
                     ProgressView()
                 }
-                if let attributionURL = weatherDataHelper.attributionURL {
-                    Link(destination: attributionURL, label : {
-                        Text("Other data sources")
-                            .font(.system(size: 12))
-                            .underline()
-                    })
-                }
+                Link(destination: attributionURL, label : {
+                    Text("Other data sources")
+                        .font(.system(size: 12))
+                        .underline()
+                })
             }
         }
         .onAppear {

@@ -15,13 +15,12 @@ struct RainGraph: View {
     var body: some View {
         if let minuteForecast = weatherDataHelper.minuteForecast {
             if let hourlyForecast = weatherDataHelper.hourlyForecast {
-                if ((hourlyForecast[0].precipitationChance * 100) > 0 ) {
+                if ((hourlyForecast[0].precipitationChance * 100) > 0 && hourlyForecast[0].precipitationAmount.value > 0) {
+                 
                     VStack(alignment: .leading) {
                         HStack {
                             Image(systemName: "cloud.rain.fill")
                             Text("Possible Precipitation")
-                        }
-                        .onAppear {
                         }
                         Chart {
                             ForEach(minuteForecast [0...60], id: \.self.date) { minute in

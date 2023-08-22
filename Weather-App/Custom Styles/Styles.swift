@@ -5,7 +5,6 @@
 //  Created by Matt Sullivan on 22/08/2023.
 //
 
-import Foundation
 import SwiftUI
 
 struct GlassCard: ViewModifier {
@@ -33,5 +32,31 @@ struct SymbolFill: ViewModifier {
         content
             .symbolVariant(/*@START_MENU_TOKEN@*/.fill/*@END_MENU_TOKEN@*/)
             .symbolRenderingMode(.multicolor)
+    }
+}
+
+struct RainGaugeStyle: GaugeStyle {
+    private var blueGradient = LinearGradient(gradient: Gradient(colors: [.mint, .cyan]), startPoint: .leading, endPoint: .trailing)
+    
+    func makeBody(configuration: Configuration) -> some View {
+        ZStack {
+            Circle()
+                .trim(from: 0, to: 0.75)
+                .stroke(Color(.transparent), style: StrokeStyle(lineWidth: 10, lineCap: .round, lineJoin: .round))
+                .rotationEffect(.degrees(135))
+
+            Circle()
+                .trim(from: 0, to: 0.75 * configuration.value)
+                .stroke(blueGradient, style: StrokeStyle(lineWidth: 10, lineCap: .round))
+                .rotationEffect(.degrees(135))
+
+            VStack {
+                configuration.currentValueLabel
+                    .font(.system(size: 22, weight: .semibold, design: .rounded))
+                Text("%")
+                    .font(.system(size: 14, design: .rounded))
+            }
+        }
+        .frame(width: 100, height: 100)
     }
 }

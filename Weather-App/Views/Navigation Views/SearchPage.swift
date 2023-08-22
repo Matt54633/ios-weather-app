@@ -14,30 +14,15 @@ struct SearchPage: View {
     @Environment(\.dismiss) var dismiss
     
     @State private var searchString: String = ""
-    @State private var searchLocationCoords: CLLocation = CLLocation(latitude: 0, longitude: 0)
     @State private var locationNames: [MKPlacemark] = []
     @State private var searchFailed: Bool = false
     
     var body: some View {
         List {
             Section {
-                ForEach(locationNames,  id: \.self) { location in
-                    if let locationName = location.name, let subLocality = location.subAdministrativeArea, let country = location.countryCode {
-                        HStack {
-                            HStack {
-                                Text("\(locationName), \(subLocality), \(country)")
-                                    .foregroundStyle(.black)
-                            }
-                            Spacer()
-                            Image(systemName: "plus")
-                                .foregroundStyle(Color("Dark Purple"))
-                        }
-                        .onTapGesture {
-                            geocode(locationName: "\(locationName), \(country)", fullLocationName: "\(locationName), \(subLocality), \(country)")
-                        }
-                        .alert(isPresented: $searchFailed) {
-                            Alert(title: Text("Invalid Map Location"), message: Text("Please try refining your search area"), dismissButton: .default(Text("Got it!")))
-                       }
+                ForEach(locationNames, id: \.self) { location in
+                    LocationRow(placemark: location, searchFailed: $searchFailed) {
+                        geocode(locationName: location.formattedName, geocodeLocation: location.geocodeLocation)
                     }
                 }
             } header: {
@@ -54,27 +39,16 @@ struct SearchPage: View {
         .navigationTitle("Add Location")
     }
     
-    func geocode(locationName: String, fullLocationName: String) {
+    func geocode(locationName: String, geocodeLocation: String) {
         let geoCoder = CLGeocoder()
-        geoCoder.geocodeAddressString(fullLocationName, completionHandler: { (placemarks, error) in
+        geoCoder.geocodeAddressString(geocodeLocation) { placemarks, error in
             if error != nil {
                 searchFailed = true
-                return
-            }
-            
-            var location: CLLocation?
-            
-            if let placemarks = placemarks, placemarks.count > 0 {
-                location = placemarks.first?.location
-            }
-                        
-            if let location = location {
-                searchLocationCoords = location
-                addLocation(locationName: locationName, fullLocationName: fullLocationName, context: context)
+            } else if (placemarks?.first) != nil {
+                addLocation(locationName: locationName, fullLocationName: geocodeLocation, context: context)
                 dismiss()
             }
-            else {}
-        })
+        }
     }
     
     func searchRequest() {
@@ -94,6 +68,40 @@ struct SearchPage: View {
                 locationNames.append(item.placemark)
             }
         }
+    }
+}
+
+struct LocationRow: View {
+    let placemark: MKPlacemark
+    @Binding var searchFailed: Bool
+    let onAdd: () -> Void
+    
+    var body: some View {
+        HStack {
+            Text(placemark.formattedFullLocation)
+                .foregroundStyle(.black)
+            Spacer()
+            Image(systemName: "plus")
+                .foregroundStyle(Color("Dark Purple"))
+        }
+        .onTapGesture(perform: onAdd)
+        .alert(isPresented: $searchFailed) {
+            Alert(title: Text("Invalid Map Location"), message: Text("Please try refining your search area"), dismissButton: .default(Text("Got it!")))
+        }
+    }
+}
+
+extension MKPlacemark {
+    var formattedName: String {
+        [name, countryCode].compactMap { $0 }.joined(separator: ", ")
+    }
+    
+    var formattedFullLocation: String {
+        [name, subAdministrativeArea, countryCode].compactMap { $0 }.joined(separator: ", ")
+    }
+    
+    var geocodeLocation: String {
+        [locality, subAdministrativeArea, countryCode].compactMap { $0 }.joined(separator: ", ")
     }
 }
 

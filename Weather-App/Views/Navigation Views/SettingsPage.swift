@@ -16,21 +16,17 @@ struct SettingsPage: View {
             Section {
                 HStack {
                     Image(systemName: "location")
-                        .foregroundStyle(userLocationHelper.locationPermission ?? false ? Color.green : Color.red)
+                        .foregroundColor(userLocationHelper.locationPermission == true ? .green : .red)
                     Text("Location Services \(userLocationHelper.locationPermission == true ? "Enabled" : "Disabled")")
                 }
-                Button(action: {
-                    if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
-                        UIApplication.shared.open(settingsURL)
-                    }
-                }) {
+                Button(action: openSystemSettings) {
                     HStack {
                         Image(systemName: "gear")
-                            .foregroundStyle(Color(.darkPurple))
-                        Text("Open System settings")
+                            .foregroundColor(Color(.darkPurple))
+                        Text("Open System Settings")
                         Spacer()
                         Image(systemName: "chevron.right")
-                            .foregroundStyle(.gray)
+                            .foregroundColor(.gray)
                             .fontWeight(.semibold)
                             .font(.system(size: 14))
                     }
@@ -42,6 +38,12 @@ struct SettingsPage: View {
         }
         .modifier(NavigationBar())
         .navigationTitle("Settings")
+    }
+    
+    func openSystemSettings() {
+        if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+            UIApplication.shared.open(settingsURL)
+        }
     }
 }
 

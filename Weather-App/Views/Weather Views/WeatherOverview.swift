@@ -18,26 +18,19 @@ struct WeatherOverview: View {
         VStack {
             if let currentWeather = weatherDataHelper.currentWeather {
                 HStack(alignment: .center) {
-                    if let searchLocName = searchedLocationName {
-                        Text(searchLocName)
-                            .multilineTextAlignment(.center)
-                    }
-                    else {
-                        if let placemark = userLocationHelper.placemark?.locality {
-                            Text(placemark)
-                                .multilineTextAlignment(.center)
-                        }
-                    }
+                    Text(searchedLocationName?.isEmpty == true ? (userLocationHelper.placemark?.locality ?? "") : searchedLocationName ?? "")
+                        .multilineTextAlignment(.center)
                     Image(systemName: currentWeather.symbolName)
                         .modifier(SymbolFill())
                 }
-                .fontWeight(.regular)
                 .font(.title)
+                      
                 Spacer(minLength: 10)
                 Text("\(currentWeather.temperature.value.rounded(.toNearestOrEven).formatted())°")
                     .font(.system(size: 64))
                     .fontWeight(.semibold)
                 Spacer(minLength: 10)
+                
                 VStack {
                     Text(currentWeather.condition.description)
                     if let dailyWeather = weatherDataHelper.dailyForecast {
@@ -45,9 +38,9 @@ struct WeatherOverview: View {
                     }
                 }
                 .font(.headline)
-                .fontWeight(.regular)
             }
         }
+        .fontWeight(.regular)
     }
 }
 

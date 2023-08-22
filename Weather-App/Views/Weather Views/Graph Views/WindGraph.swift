@@ -37,7 +37,6 @@ struct WindGraph: View {
                     VStack {
                         Text((hourData?.wind.speed.formatted().dropLast(4) ?? dayData?.wind.speed.formatted().dropLast(4) ?? ""))
                             .font(.system(size: 22))
-                            .font(.largeTitle)
                             .fontWeight(.semibold)
                         Text("mph")
                             .font(.system(size: 12))

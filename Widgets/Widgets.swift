@@ -139,10 +139,3 @@ struct Widgets: Widget {
         .supportedFamilies([.systemSmall, .systemMedium])
     }
 }
-
-//#Preview(as: .systemSmall) {
-//    Widgets()
-//} timeline: {
-//    SimpleEntry(date: .now, configuration: .smiley)
-//    SimpleEntry(date: .now, configuration: .starEyes)
-//}

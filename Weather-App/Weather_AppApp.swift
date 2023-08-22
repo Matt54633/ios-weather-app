@@ -16,6 +16,5 @@ struct Weather_AppApp: App {
                 .fontDesign(.rounded)
         }
         .modelContainer(for: location.self)
-        
     }
 }

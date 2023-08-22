@@ -81,10 +81,10 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         requestPermission()
         locationManager.requestLocation()
     }
-   
+    
     func loadAddedLocation(fullLocationName: String) async {
         let geoCoder = CLGeocoder()
-
+        
         await withTaskGroup(of: Void.self) { taskGroup in
             taskGroup.addTask {
                 await withCheckedContinuation { continuation in
@@ -96,13 +96,13 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
                             continuation.resume(returning: ())
                             return
                         }
-
+                        
                         self.searchLocation = location
-
+                        
                         if let searchLoc = self.searchLocation {
                             self.searchMapPosition = MapCameraPosition.region(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: searchLoc.coordinate.latitude, longitude: searchLoc.coordinate.longitude), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5)))
                         }
-                        continuation.resume(returning: ())  // Call this once
+                        continuation.resume(returning: ())
                     }
                 }
             }

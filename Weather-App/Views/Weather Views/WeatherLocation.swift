@@ -15,7 +15,6 @@ struct WeatherLocation: View {
     @ObservedObject var userLocationHelper = LocationManager.shared
     @ObservedObject var weatherDataHelper = WeatherData.shared
     
-    // search location information
     let locationName: String
     let fullLocationName: String
     
@@ -24,11 +23,7 @@ struct WeatherLocation: View {
             Background()
             ScrollView {
                 VStack {
-                    if locationName == "" {
-                        WeatherOverview()
-                    } else {
-                        WeatherOverview(searchedLocationName: locationName)
-                    }
+                    WeatherOverview(searchedLocationName: locationName)
                     Spacer(minLength: 50)
                     if sizeClass == .compact {
                         RainGraph()
@@ -37,23 +32,15 @@ struct WeatherLocation: View {
                         Spacer(minLength: 20)
                         DayList()
                         Spacer(minLength: 20)
-                        if locationName == "" {
-                            UserLocationMap()
-                        } else {
-                            AddedLocationMap()
-                        }
+                        MapView(isUserLocation: locationName.isEmpty)
                     } else {
                         VStack(alignment: .leading) {
                             HStack(alignment: .top) {
                                 VStack {
                                     HourList()
                                     Spacer(minLength: 20)
-                                    if locationName == "" {
-                                        UserLocationMap()
-                                            .frame(height: 310)
-                                    } else {
-                                        AddedLocationMap()
-                                    }
+                                    MapView(isUserLocation: locationName.isEmpty)
+                                        .frame(height: 310)
                                 }
                                 Spacer(minLength: 20)
                                 DayList()
@@ -62,7 +49,7 @@ struct WeatherLocation: View {
                     }
                     Spacer(minLength: 20)
                     WeatherInsights()
-                    Spacer(minLength: 20)
+                    Spacer(minLength: 50)
                     WeatherAttribution()
                 }
                 .padding()
@@ -71,25 +58,33 @@ struct WeatherLocation: View {
         }
         .toolbarBackground(.hidden, for: .navigationBar)
         .foregroundStyle(.white)
-        .onAppear {
-            if locationName == "" {
-                userLocationHelper.loadUserCurrentLocation()
-                weatherDataHelper.loadCurrentWeatherData()
-            } else {
-                Task.detached { @MainActor in
-                    await userLocationHelper.loadAddedLocation(fullLocationName: fullLocationName)
-                }
-            }
-            WidgetCenter.shared.reloadAllTimelines()
-        }
+        .onAppear(perform: loadLocationData)
         .refreshable {
-            if locationName == "" {
-                userLocationHelper.loadUserCurrentLocation()
-                weatherDataHelper.loadCurrentWeatherData()
-            } else {
+            loadLocationData()
+        }
+    }
+    
+    private func loadLocationData() {
+        if locationName.isEmpty {
+            userLocationHelper.loadUserCurrentLocation()
+            weatherDataHelper.loadCurrentWeatherData()
+        } else {
+            Task.detached { @MainActor in
                 await userLocationHelper.loadAddedLocation(fullLocationName: fullLocationName)
             }
-            WidgetCenter.shared.reloadAllTimelines()
+        }
+        WidgetCenter.shared.reloadAllTimelines()
+    }
+}
+
+struct MapView: View {
+    let isUserLocation: Bool
+    
+    var body: some View {
+        if isUserLocation {
+            UserLocationMap()
+        } else {
+            AddedLocationMap()
         }
     }
 }

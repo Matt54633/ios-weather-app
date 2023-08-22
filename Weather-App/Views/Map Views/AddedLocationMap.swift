@@ -35,7 +35,7 @@ struct AddedLocationMap: View {
             }
         }
         .tint(Color(.darkPurple))
-        .frame(height: 200)
+        .frame(minHeight: 200)
         .cornerRadius(25)
     }
 }

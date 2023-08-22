@@ -52,8 +52,8 @@ struct WeatherInsights: View {
                 Image(systemName: "wand.and.stars")
                 Text("This week's insights")
             }
-            Divider()
-                .overlay(.white)
+//            Divider()
+//                .overlay(.white)
             Spacer(minLength: 20)
             HStack {
                 if let temperatureInsights = weekTempInsights {
