@@ -24,7 +24,6 @@ struct HourView: View {
                                 .font(.largeTitle)
                             Spacer()
                             Image(systemName: hourData.symbolName)
-                                .symbolVariant(/*@START_MENU_TOKEN@*/.fill/*@END_MENU_TOKEN@*/)
                                 .font(.title)
                         }
                         .fontWeight(.semibold)
@@ -72,9 +71,8 @@ struct HourView: View {
                     }
                 }
                 .toolbarBackground(.hidden, for: .navigationBar)
-                .symbolRenderingMode(.multicolor)
+                .modifier(SymbolFill())
                 .foregroundStyle(.white)
-                .fontDesign(.rounded)
                 .padding()
             }
         }

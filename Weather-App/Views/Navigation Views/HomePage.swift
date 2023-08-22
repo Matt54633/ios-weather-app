@@ -85,13 +85,10 @@ struct HomePage: View {
                         Text("Preferences")
                     }
                 }
-                .toolbarColorScheme(.dark, for: .navigationBar)
-                .toolbarBackground(Color("Lilac"),for: .navigationBar)
-                .toolbarBackground(.visible, for: .navigationBar)
+                .modifier(NavigationBar())
                 .navigationTitle("Home")
             }
             .buttonBorderShape(.capsule)
-            .background(Color("Lilac"))
         }
         .onAppear {
             userLocationHelper.requestPermission()

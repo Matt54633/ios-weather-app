@@ -27,11 +27,7 @@ struct HumidityGraph: View {
             Text("The current dew point is \(hourData.dewPoint.value.rounded(.toNearestOrAwayFromZero).formatted())°")
                 .font(.system(size: 14))
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background(Color("Transparent"))
-        .clipShape(RoundedRectangle(cornerRadius:20))
-        .shadow(radius: 5)
+        .modifier(GlassCard())
     }
     
 }

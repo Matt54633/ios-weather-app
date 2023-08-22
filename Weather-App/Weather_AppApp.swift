@@ -13,7 +13,9 @@ struct Weather_AppApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .fontDesign(.rounded)
         }
         .modelContainer(for: location.self)
+        
     }
 }

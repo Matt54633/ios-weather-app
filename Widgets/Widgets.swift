@@ -10,15 +10,6 @@ import SwiftUI
 import WeatherKit
 import CoreLocation
 
-extension String {
-    var capitalizedSentence: String {
-        let firstLetter = self.prefix(1).capitalized
-        let remainingLetters = self.dropFirst().lowercased()
-
-        return firstLetter + remainingLetters
-    }
-}
-
 struct Provider: TimelineProvider {
     @ObservedObject var userLocationHelper = LocationManager.shared
     @State private var userLocation = CLLocation(latitude: 0, longitude: 0)
@@ -146,7 +137,6 @@ struct Widgets: Widget {
         .configurationDisplayName("Current Location Weather")
         .description("View the current weather at your location")
         .supportedFamilies([.systemSmall, .systemMedium])
-        
     }
 }
 

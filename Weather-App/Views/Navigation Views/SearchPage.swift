@@ -50,12 +50,8 @@ struct SearchPage: View {
         .onChange(of: searchString) {
             searchRequest()
         }
+        .modifier(NavigationBar())
         .navigationTitle("Add Location")
-        .toolbarColorScheme(.dark, for: .navigationBar)
-        .toolbarBackground(Color("Lilac"),for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
-        .foregroundStyle(.white)
-        .fontDesign(.rounded)
     }
     
     func geocode(locationName: String, fullLocationName: String) {

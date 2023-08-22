@@ -15,7 +15,6 @@ struct VisibilityGraph: View {
             VStack(alignment: .leading) {
                 HStack {
                     Image(systemName: "eye.fill")
-                        .symbolRenderingMode(.multicolor)
                     Text("Visibility")
                 }
                 Spacer()
@@ -27,11 +26,8 @@ struct VisibilityGraph: View {
                 Text("\(Int(hourData.cloudCover * 100))% Cloud Cover")
                     .font(.system(size: 14))
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding()
-            .background(Color("Transparent"))
-            .clipShape(RoundedRectangle(cornerRadius:20))
-            .shadow(radius: 5)
+            .modifier(GlassCard())
+            .modifier(SymbolFill())
         }
 }
 

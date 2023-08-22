@@ -23,8 +23,7 @@ struct HourList: View {
                                     .fontWeight(.semibold)
                                 Spacer(minLength: 10)
                                 Image(systemName: weatherEntry.symbolName)
-                                    .symbolVariant(/*@START_MENU_TOKEN@*/.fill/*@END_MENU_TOKEN@*/)
-                                    .symbolRenderingMode(.multicolor)
+                                    .modifier(SymbolFill())
                                 Spacer(minLength: 10)
                                 Text("\(weatherEntry.temperature.value.rounded(.toNearestOrEven).formatted())°")
                             }
@@ -32,10 +31,7 @@ struct HourList: View {
                     }
                 }
             }
-            .padding()
-            .background(Color("Transparent"))
-            .clipShape(RoundedRectangle(cornerRadius:20))
-            .shadow(radius: 5)
+            .modifier(GlassCard())
         }
     }
 }

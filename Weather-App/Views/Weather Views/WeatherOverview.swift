@@ -29,8 +29,7 @@ struct WeatherOverview: View {
                         }
                     }
                     Image(systemName: currentWeather.symbolName)
-                        .symbolVariant(/*@START_MENU_TOKEN@*/.fill/*@END_MENU_TOKEN@*/)
-                        .symbolRenderingMode(.multicolor)
+                        .modifier(SymbolFill())
                 }
                 .fontWeight(.regular)
                 .font(.title)

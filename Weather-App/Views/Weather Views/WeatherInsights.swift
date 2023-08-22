@@ -72,7 +72,6 @@ struct WeatherInsights: View {
             }
         }
         .foregroundStyle(.white)
-        .fontDesign(.rounded)
     }
     
     var weekTempInsights: TemperatureInsights? {

@@ -19,7 +19,6 @@ struct RainGraph: View {
                     VStack(alignment: .leading) {
                         HStack {
                             Image(systemName: "cloud.rain.fill")
-                                .symbolRenderingMode(.multicolor)
                             Text("Possible Precipitation")
                         }
                         .onAppear {
@@ -55,10 +54,8 @@ struct RainGraph: View {
                         }
                         .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.mint, .cyan]), startPoint: .top, endPoint: .bottom))
                     }
-                    .padding()
-                    .background(Color("Transparent"))
-                    .clipShape(RoundedRectangle(cornerRadius:20))
-                    .shadow(radius: 5)
+                    .modifier(GlassCard())
+                    .modifier(SymbolFill())
                 }
             }
         }

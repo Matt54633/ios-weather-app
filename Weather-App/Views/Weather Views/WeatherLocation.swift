@@ -70,20 +70,25 @@ struct WeatherLocation: View {
             }
         }
         .toolbarBackground(.hidden, for: .navigationBar)
-        .fontDesign(.rounded)
         .foregroundStyle(.white)
         .onAppear {
-            userLocationHelper.loadUserCurrentLocation()
-            weatherDataHelper.loadCurrentWeatherData()
-            Task.detached { @MainActor in
-                await userLocationHelper.loadAddedLocation(fullLocationName: fullLocationName)
+            if locationName == "" {
+                userLocationHelper.loadUserCurrentLocation()
+                weatherDataHelper.loadCurrentWeatherData()
+            } else {
+                Task.detached { @MainActor in
+                    await userLocationHelper.loadAddedLocation(fullLocationName: fullLocationName)
+                }
             }
             WidgetCenter.shared.reloadAllTimelines()
         }
         .refreshable {
-            userLocationHelper.loadUserCurrentLocation()
-            weatherDataHelper.loadCurrentWeatherData()
-            await userLocationHelper.loadAddedLocation(fullLocationName: fullLocationName)
+            if locationName == "" {
+                userLocationHelper.loadUserCurrentLocation()
+                weatherDataHelper.loadCurrentWeatherData()
+            } else {
+                await userLocationHelper.loadAddedLocation(fullLocationName: fullLocationName)
+            }
             WidgetCenter.shared.reloadAllTimelines()
         }
     }

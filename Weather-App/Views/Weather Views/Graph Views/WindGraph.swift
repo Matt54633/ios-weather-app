@@ -18,7 +18,6 @@ struct WindGraph: View {
         VStack(alignment: .leading) {
             HStack {
                 Image(systemName: "wind")
-                    .symbolRenderingMode(.multicolor)
                 Text("Wind")
             }
             Spacer()
@@ -35,7 +34,6 @@ struct WindGraph: View {
                     Circle()
                         .frame(width: 65, height: 65)
                         .foregroundStyle(Color(.lightPurple))
-                    
                     VStack {
                         Text((hourData?.wind.speed.formatted().dropLast(4) ?? dayData?.wind.speed.formatted().dropLast(4) ?? ""))
                             .font(.system(size: 22))
@@ -53,11 +51,8 @@ struct WindGraph: View {
                     .foregroundColor(.gray)
             }
         }
-        .frame(maxWidth: .infinity)
-        .padding()
-        .background(Color("Transparent"))
-        .clipShape(RoundedRectangle(cornerRadius:20))
-        .shadow(radius: 5)
+        .modifier(GlassCard())
+        .modifier(SymbolFill())
     }
     
     private var maxWindSpeed: Double? {

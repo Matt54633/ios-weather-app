@@ -17,11 +17,13 @@ class WeatherData: ObservableObject {
     @Published var hourlyForecast: Forecast<HourWeather>?
     @Published var dailyForecast: Forecast<DayWeather>?
     @Published var minuteForecast: Forecast<MinuteWeather>?
+    @Published var attributionURL: URL?
+    @Published var attributionLogo: URL?
     @Published var isLoading: Bool = true
-
+    
     func updateCurrentWeather(userLocation: CLLocation) async {
         self.isLoading = true
-
+        
         Task.detached(priority: .userInitiated) {
             do {
                 let oneDayFuture = Date().addingTimeInterval(86400)
@@ -56,6 +58,18 @@ class WeatherData: ObservableObject {
         }
         Task.detached { @MainActor in
             await WeatherData.shared.updateCurrentWeather(userLocation: searchLocation)
+        }
+    }
+    
+    func loadAttribution() {
+        Task.detached { @MainActor in
+            do {
+                let attribution = try await self.service.attribution
+                self.attributionURL = attribution.legalPageURL
+                self.attributionLogo = attribution.combinedMarkDarkURL
+            } catch {
+                print("failed to load attribution")
+            }
         }
     }
 }

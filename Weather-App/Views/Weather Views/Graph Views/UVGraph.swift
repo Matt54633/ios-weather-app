@@ -16,7 +16,6 @@ struct UVGraph: View {
         VStack(alignment: .leading) {
             HStack {
                 Image(systemName: "thermometer.sun.fill")
-                    .symbolRenderingMode(.multicolor)
                 Text("UV Index")
             }
             Spacer()
@@ -39,11 +38,8 @@ struct UVGraph: View {
                     .foregroundColor(.gray)
             }
         }
-        .frame(maxWidth: .infinity)
-        .padding()
-        .background(Color("Transparent"))
-        .clipShape(RoundedRectangle(cornerRadius:20))
-        .shadow(radius: 5)
+        .modifier(GlassCard())
+        .modifier(SymbolFill())
     }
 }
 

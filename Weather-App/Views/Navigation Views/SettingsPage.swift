@@ -10,18 +10,20 @@ import SwiftUI
 struct SettingsPage: View {
     @Environment(\.openURL) var openURL
     @ObservedObject var userLocationHelper = LocationManager.shared
-    @State private var locationPermissionStatus: String = ""
-    @State private var permissionColour: Color = .red
     
     var body: some View {
         List {
             Section {
                 HStack {
                     Image(systemName: "location")
-                        .foregroundStyle(Color(permissionColour))
-                    Text("Location Services \(locationPermissionStatus)")
+                        .foregroundStyle(userLocationHelper.locationPermission ?? false ? Color.green : Color.red)
+                    Text("Location Services \(userLocationHelper.locationPermission == true ? "Enabled" : "Disabled")")
                 }
-                Button(action: openSettings) {
+                Button(action: {
+                    if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+                        UIApplication.shared.open(settingsURL)
+                    }
+                }) {
                     HStack {
                         Image(systemName: "gear")
                             .foregroundStyle(Color(.darkPurple))
@@ -37,29 +39,9 @@ struct SettingsPage: View {
             } header: {
                 Text("Location Services")
             }
-            
         }
-        .toolbarColorScheme(.dark, for: .navigationBar)
-        .toolbarBackground(Color("Lilac"),for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
+        .modifier(NavigationBar())
         .navigationTitle("Settings")
-        .onAppear {
-            locationEnabled()
-        }
-    }
-    
-    func openSettings() {
-        openURL(URL(string: UIApplication.openSettingsURLString)!)
-    }
-    
-    func locationEnabled() {
-        if userLocationHelper.locationManager.authorizationStatus == .authorizedAlways || userLocationHelper.locationManager.authorizationStatus == .authorizedWhenInUse {
-            locationPermissionStatus = "Enabled"
-            permissionColour = .green
-        } else {
-            locationPermissionStatus = "Disabled"
-            permissionColour = .red
-        }
     }
 }
 

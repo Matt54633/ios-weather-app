@@ -30,8 +30,7 @@ struct DayList: View {
                                     .frame(minWidth: 50)
                                 Spacer()
                                 Image(systemName: weatherEntry.symbolName)
-                                    .symbolVariant(/*@START_MENU_TOKEN@*/.fill/*@END_MENU_TOKEN@*/)
-                                    .symbolRenderingMode(.multicolor)
+                                    .modifier(SymbolFill())
                                     .frame(minWidth: 50)
                                 Spacer()
                                 Text("\(weatherEntry.highTemperature.value.rounded(.toNearestOrEven).formatted())° | \(weatherEntry.lowTemperature.value.rounded(.toNearestOrEven).formatted())°")
@@ -42,10 +41,7 @@ struct DayList: View {
                     }
                 }
             }
-            .padding()
-            .background(Color("Transparent"))
-            .clipShape(RoundedRectangle(cornerRadius:20))
-            .shadow(radius: 5)
+            .modifier(GlassCard())
         }
     }
 }

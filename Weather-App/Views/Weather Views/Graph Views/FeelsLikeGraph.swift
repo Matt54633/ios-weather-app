@@ -35,11 +35,7 @@ struct FeelsLikeGraph: View {
                 }
                 .font(.system(size: 14))
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding()
-            .background(Color("Transparent"))
-            .clipShape(RoundedRectangle(cornerRadius:20))
-            .shadow(radius: 5)
+            .modifier(GlassCard())
         }
 }
 

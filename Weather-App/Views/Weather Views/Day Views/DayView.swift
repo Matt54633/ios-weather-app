@@ -24,7 +24,6 @@ struct DayView: View {
                                 .font(.largeTitle)
                             Spacer()
                             Image(systemName: dayData.symbolName)
-                                .symbolVariant(/*@START_MENU_TOKEN@*/.fill/*@END_MENU_TOKEN@*/)
                                 .font(.title)
                         }
                         .fontWeight(.semibold)
@@ -79,9 +78,8 @@ struct DayView: View {
                 }
             }
             .toolbarBackground(.hidden, for: .navigationBar)
-            .symbolRenderingMode(.multicolor)
+            .modifier(SymbolFill())
             .foregroundStyle(.white)
-            .fontDesign(.rounded)
             .padding()
         }
     }
