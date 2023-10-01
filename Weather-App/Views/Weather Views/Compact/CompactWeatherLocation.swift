@@ -12,8 +12,8 @@ import MapKit
 
 struct WeatherLocation: View {
     @Environment(\.horizontalSizeClass) var sizeClass
-    @ObservedObject var userLocationHelper = LocationManager.shared
-    @ObservedObject var weatherDataHelper = WeatherData.shared
+    @StateObject var userLocationHelper = LocationManager.shared
+    @StateObject var weatherDataHelper = WeatherData.shared
     
     let locationName: String
     let fullLocationName: String
@@ -32,27 +32,27 @@ struct WeatherLocation: View {
                         Spacer(minLength: 20)
                         DayList()
                         Spacer(minLength: 20)
-                        MapView(isUserLocation: locationName.isEmpty)
+                        MapView(isUserLocation: locationName.isEmpty, locationName: locationName)
                     } else {
                         VStack(alignment: .leading) {
                             HStack(alignment: .top) {
                                 VStack {
                                     HourList()
                                     Spacer(minLength: 20)
-                                    MapView(isUserLocation: locationName.isEmpty)
-                                        .frame(height: 310)
+                                    MapView(isUserLocation: locationName.isEmpty, locationName: locationName)
+                                        .frame(height: 430)
                                 }
                                 Spacer(minLength: 20)
                                 DayList()
                             }
                         }
                     }
-                    Spacer(minLength: 20)
-                    WeatherInsights()
+//                    Spacer(minLength: 20)
+//                    WeatherInsights()
                     Spacer(minLength: 50)
                     WeatherAttribution()
                 }
-                .padding()
+                .padding(sizeClass == .compact ? .init(.init(top: 15, leading: 15, bottom: 15, trailing: 15)) : .init(top: 40, leading: 40, bottom: 40, trailing: 40))
                 .redacted(reason: weatherDataHelper.isLoading == true ? .placeholder : [])
             }
         }
@@ -79,12 +79,13 @@ struct WeatherLocation: View {
 
 struct MapView: View {
     let isUserLocation: Bool
-    
+    let locationName: String
+
     var body: some View {
         if isUserLocation {
             UserLocationMap()
         } else {
-            AddedLocationMap()
+            AddedLocationMap(locationName: locationName)
         }
     }
 }

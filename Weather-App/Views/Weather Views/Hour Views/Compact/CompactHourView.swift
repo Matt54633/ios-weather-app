@@ -44,7 +44,7 @@ struct HourView: View {
                 .toolbarBackground(.hidden, for: .navigationBar)
                 .modifier(SymbolFill())
                 .foregroundStyle(.white)
-                .padding()
+                .padding(sizeClass == .compact ? .init(.init(top: 15, leading: 15, bottom: 0, trailing: 15)) : .init(top: 40, leading: 40, bottom: 0, trailing: 40))
             }
         }
     }
@@ -54,21 +54,12 @@ private struct CompactGraphs: View {
     let hourData: Forecast<HourWeather>.Element
     
     var body: some View {
-        HStack {
+        LazyVGrid(columns: [GridItem(.flexible(), spacing: 15)], spacing: 15) {
             WindGraph(hourData: hourData, dayData: nil)
-            Spacer(minLength: 20)
             RainInfoGraph(hourData: hourData, dayData: nil)
-        }
-        Spacer(minLength: 20)
-        HStack {
             UVGraph(hourData: hourData, dayData: nil)
-            Spacer(minLength: 20)
             VisibilityGraph(hourData: hourData)
-        }
-        Spacer(minLength: 20)
-        HStack {
             FeelsLikeGraph(hourData: hourData)
-            Spacer(minLength: 20)
             HumidityGraph(hourData: hourData)
         }
     }
@@ -78,23 +69,18 @@ private struct RegularGraphs: View {
     let hourData: Forecast<HourWeather>.Element
     
     var body: some View {
-        HStack {
+        LazyVGrid(columns: [GridItem(.flexible(), spacing: 15), GridItem(.flexible())], spacing: 15) {
             WindGraph(hourData: hourData, dayData: nil)
-            Spacer(minLength: 20)
             RainInfoGraph(hourData: hourData, dayData: nil)
-            Spacer(minLength: 20)
             UVGraph(hourData: hourData, dayData: nil)
-        }
-        Spacer(minLength: 20)
-        HStack {
             VisibilityGraph(hourData: hourData)
-            Spacer(minLength: 20)
             FeelsLikeGraph(hourData: hourData)
-            Spacer(minLength: 20)
             HumidityGraph(hourData: hourData)
         }
     }
 }
+
+
 
 //struct HourView_Previews: PreviewProvider {
 //    static var previews: some View {

@@ -46,7 +46,7 @@ struct DayView: View {
             .toolbarBackground(.hidden, for: .navigationBar)
             .modifier(SymbolFill())
             .foregroundStyle(.white)
-            .padding()
+            .padding(sizeClass == .compact ? .init(.init(top: 15, leading: 15, bottom: 0, trailing: 15)) : .init(top: 40, leading: 40, bottom: 0, trailing: 40))
         }
     }
 }
@@ -55,13 +55,9 @@ private struct CompactGraphs: View {
     let dayData: Forecast<DayWeather>.Element
     
     var body: some View {
-        HStack {
+        LazyVGrid(columns: [GridItem(.flexible(), spacing: 15)], spacing: 15) {
             WindGraph(hourData: nil, dayData: dayData)
-            Spacer(minLength: 20)
             RainInfoGraph(hourData: nil, dayData: dayData)
-        }
-        Spacer(minLength: 20)
-        HStack {
             UVGraph(hourData: nil, dayData: dayData)
         }
     }
@@ -71,11 +67,9 @@ private struct RegularGraphs: View {
     let dayData: Forecast<DayWeather>.Element
     
     var body: some View {
-        HStack {
+        LazyVGrid(columns: [GridItem(.flexible(), spacing: 15), GridItem(.flexible(), spacing: 15)], spacing: 15) {
             WindGraph(hourData: nil, dayData: dayData)
-            Spacer(minLength: 20)
             RainInfoGraph(hourData: nil, dayData: dayData)
-            Spacer(minLength: 20)
             UVGraph(hourData: nil, dayData: dayData)
         }
     }
