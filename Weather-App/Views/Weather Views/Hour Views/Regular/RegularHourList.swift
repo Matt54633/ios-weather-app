@@ -6,13 +6,42 @@
 //
 
 import SwiftUI
+import WeatherKit
 
 struct RegularHourList: View {
+    @StateObject var weatherDataHelper = WeatherData.shared
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        if let hourlyWeather = weatherDataHelper.hourlyForecast {
+            VStack(alignment: .leading) {
+                Text("NEXT 24 HOURS")
+                    .modifier(CalloutTextStyle())
+                ScrollView(.horizontal) {
+                    HStack {
+                        ForEach(hourlyWeather, id: \.self.date) { weatherEntry in
+                            NavigationLink {
+                                RegularHourView(hourData: weatherEntry)
+                            } label : {
+                                VStack {
+                                    Text(DateFormatter.localizedString(from: weatherEntry.date, dateStyle: .none, timeStyle: .short))
+                                        .fontWeight(.semibold)
+                                    Spacer(minLength: 10)
+                                    Image(systemName: weatherEntry.symbolName)
+                                        .modifier(SymbolFill())
+                                    Spacer(minLength: 10)
+                                    Text("\(weatherEntry.temperature.value.rounded(.toNearestOrEven).formatted())°")
+                                }
+                                
+                            }
+                        }
+                    }
+                }
+                .modifier(GlassCard())
+            }
+        }
     }
 }
-
-#Preview {
-    RegularHourList()
-}
+//
+//#Preview {
+//    RegularHourList()
+//}

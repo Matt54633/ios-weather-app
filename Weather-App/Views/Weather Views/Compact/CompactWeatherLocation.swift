@@ -10,8 +10,7 @@ import WidgetKit
 import CoreLocation
 import MapKit
 
-struct WeatherLocation: View {
-    @Environment(\.horizontalSizeClass) var sizeClass
+struct CompactWeatherLocation: View {
     @StateObject var userLocationHelper = LocationManager.shared
     @StateObject var weatherDataHelper = WeatherData.shared
     
@@ -25,34 +24,19 @@ struct WeatherLocation: View {
                 VStack {
                     WeatherOverview(searchedLocationName: locationName)
                     Spacer(minLength: 50)
-                    if sizeClass == .compact {
-                        RainGraph()
-                        Spacer(minLength: 20)
-                        HourList()
-                        Spacer(minLength: 20)
-                        DayList()
-                        Spacer(minLength: 20)
-                        MapView(isUserLocation: locationName.isEmpty, locationName: locationName)
-                    } else {
-                        VStack(alignment: .leading) {
-                            HStack(alignment: .top) {
-                                VStack {
-                                    HourList()
-                                    Spacer(minLength: 20)
-                                    MapView(isUserLocation: locationName.isEmpty, locationName: locationName)
-                                        .frame(height: 430)
-                                }
-                                Spacer(minLength: 20)
-                                DayList()
-                            }
-                        }
-                    }
-//                    Spacer(minLength: 20)
-//                    WeatherInsights()
+                    AlertWarning()
+                    RainGraph()
+                    CompactHourList()
+                    Spacer(minLength: 20)
+                    CompactDayList()
+                    Spacer(minLength: 20)
+                    MapView(isUserLocation: locationName.isEmpty, locationName: locationName)
+                    //                    Spacer(minLength: 20)
+                    //                    WeatherInsights()
                     Spacer(minLength: 50)
                     WeatherAttribution()
                 }
-                .padding(sizeClass == .compact ? .init(.init(top: 15, leading: 15, bottom: 15, trailing: 15)) : .init(top: 40, leading: 40, bottom: 40, trailing: 40))
+                .padding(.init(top: 15, leading: 15, bottom: 15, trailing: 15))
                 .redacted(reason: weatherDataHelper.isLoading == true ? .placeholder : [])
             }
         }
@@ -77,21 +61,8 @@ struct WeatherLocation: View {
     }
 }
 
-struct MapView: View {
-    let isUserLocation: Bool
-    let locationName: String
-
-    var body: some View {
-        if isUserLocation {
-            UserLocationMap()
-        } else {
-            AddedLocationMap(locationName: locationName)
-        }
-    }
-}
-
 struct WeatherLocation_Previews: PreviewProvider {
     static var previews: some View {
-        WeatherLocation(locationName: "", fullLocationName: "")
+        CompactWeatherLocation(locationName: "", fullLocationName: "")
     }
 }

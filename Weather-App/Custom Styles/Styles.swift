@@ -13,17 +13,30 @@ struct GlassCard: ViewModifier {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
             .background(Color("Transparent"))
-            .clipShape(RoundedRectangle(cornerRadius:20))
-            .shadow(radius: 5)
+            .clipShape(RoundedRectangle(cornerRadius: 20))
+            .shadow(color: Color.black.opacity(0.3), radius: 10, x: 0, y: 5)
     }
 }
 
-struct NavigationBar: ViewModifier {
+struct RoundGlassCard: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .toolbarColorScheme(.dark, for: .navigationBar)
-            .toolbarBackground(Color("Lilac"),for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding()
+            .background(Color("Transparent"))
+            .clipShape(RoundedRectangle(cornerRadius: 15))
+            .shadow(color: Color.black.opacity(0.3), radius: 10, x: 0, y: 5)
+    }
+}
+
+struct GlassCapsule: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .frame(alignment: .center)
+            .padding(EdgeInsets(top: 8, leading: 15, bottom: 8, trailing: 15))
+            .background(Color("Transparent"))
+            .clipShape(RoundedRectangle(cornerRadius: 200))
+            .shadow(color: Color.black.opacity(0.3), radius: 10, x: 0, y: 5)
     }
 }
 
@@ -42,21 +55,28 @@ struct RainGaugeStyle: GaugeStyle {
         ZStack {
             Circle()
                 .trim(from: 0, to: 0.75)
-                .stroke(Color(.transparent), style: StrokeStyle(lineWidth: 10, lineCap: .round, lineJoin: .round))
+                .stroke(Color(.transparent), style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
                 .rotationEffect(.degrees(135))
 
             Circle()
                 .trim(from: 0, to: 0.75 * configuration.value)
-                .stroke(blueGradient, style: StrokeStyle(lineWidth: 10, lineCap: .round))
+                .stroke(blueGradient, style: StrokeStyle(lineWidth: 4, lineCap: .round))
                 .rotationEffect(.degrees(135))
 
             VStack {
                 configuration.currentValueLabel
-                    .font(.system(size: 22, weight: .semibold, design: .rounded))
-                Text("%")
-                    .font(.system(size: 14, design: .rounded))
+                    .font(.system(size: 16, weight: .semibold, design: .rounded))
             }
         }
-        .frame(width: 100, height: 100)
+        .frame(width: 35, height: 35)
+    }
+}
+
+struct CalloutTextStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.caption)
+            .foregroundStyle(Color(.darkTransparent))
+            .padding(.leading, 15)
     }
 }

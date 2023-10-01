@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct DayList: View {
+struct CompactDayList: View {
     @StateObject var weatherDataHelper = WeatherData.shared
     
     var body: some View {
@@ -19,7 +19,7 @@ struct DayList: View {
                     let weatherEntry = dailyWeather[index]
                     VStack(alignment: .leading, spacing: 20) {
                         NavigationLink {
-                            DayView(dayData: weatherEntry)
+                            CompactDayView(dayData: weatherEntry)
                         } label: {
                             HStack {
                                 Text(isToday(weatherEntry.date) ? "Today" : weatherEntry.date.formatted(.dateTime.weekday(.abbreviated)))
@@ -70,6 +70,6 @@ struct DayList: View {
 
 struct DayList_Previews: PreviewProvider {
     static var previews: some View {
-        DayList()
+        CompactDayList()
     }
 }

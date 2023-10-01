@@ -8,8 +8,7 @@
 import SwiftUI
 import WeatherKit
 
-struct DayView: View {
-    @Environment(\.horizontalSizeClass) var sizeClass
+struct CompactDayView: View {
     let dayData: Forecast<DayWeather>.Element
     
     var body: some View {
@@ -36,82 +35,17 @@ struct DayView: View {
                                     lowTemperature: dayData.lowTemperature.value)
                     SunriseSunsetView(sunrise: dayData.sun.sunrise, sunset: dayData.sun.sunset)
                     Spacer(minLength: 40)
-                    if sizeClass == .compact {
-                        CompactGraphs(dayData: dayData)
-                    } else {
-                        RegularGraphs(dayData: dayData)
+                    LazyVGrid(columns: [GridItem(.flexible(), spacing: 15)], spacing: 15) {
+                        WindGraph(hourData: nil, dayData: dayData)
+                        RainInfoGraph(hourData: nil, dayData: dayData)
+                        UVGraph(hourData: nil, dayData: dayData)
                     }
                 }
             }
             .toolbarBackground(.hidden, for: .navigationBar)
             .modifier(SymbolFill())
             .foregroundStyle(.white)
-            .padding(sizeClass == .compact ? .init(.init(top: 15, leading: 15, bottom: 0, trailing: 15)) : .init(top: 40, leading: 40, bottom: 0, trailing: 40))
-        }
-    }
-}
-
-private struct CompactGraphs: View {
-    let dayData: Forecast<DayWeather>.Element
-    
-    var body: some View {
-        LazyVGrid(columns: [GridItem(.flexible(), spacing: 15)], spacing: 15) {
-            WindGraph(hourData: nil, dayData: dayData)
-            RainInfoGraph(hourData: nil, dayData: dayData)
-            UVGraph(hourData: nil, dayData: dayData)
-        }
-    }
-}
-
-private struct RegularGraphs: View {
-    let dayData: Forecast<DayWeather>.Element
-    
-    var body: some View {
-        LazyVGrid(columns: [GridItem(.flexible(), spacing: 15), GridItem(.flexible(), spacing: 15)], spacing: 15) {
-            WindGraph(hourData: nil, dayData: dayData)
-            RainInfoGraph(hourData: nil, dayData: dayData)
-            UVGraph(hourData: nil, dayData: dayData)
-        }
-    }
-}
-
-private struct TemperatureView: View {
-    let highTemperature: Double
-    let lowTemperature: Double
-    
-    var body: some View {
-        VStack(alignment: .leading) {
-            Text("\(highTemperature.rounded(.toNearestOrEven).formatted())°")
-                .font(.system(size: 64))
-            Text("\(lowTemperature.rounded(.toNearestOrEven).formatted())°")
-                .font(.system(size: 40))
-        }
-        .fontWeight(.semibold)
-    }
-}
-
-private struct SunriseSunsetView: View {
-    let sunrise: Date?
-    let sunset: Date?
-    
-    var body: some View {
-        HStack {
-            Group {
-                HStack {
-                    Image(systemName: "sunrise.fill")
-                    Text(sunrise?.formatted(date: .omitted, time: .shortened) ?? "")
-                }
-                .help("Sunrise")
-                HStack {
-                    Image(systemName: "sunset.fill")
-                    Text(sunset?.formatted(date: .omitted, time: .shortened) ?? "")
-                }
-                .help("Sunset")
-            }
-            .padding(10)
-            .background(Color("Transparent"))
-            .clipShape(RoundedRectangle(cornerRadius:20))
-            .shadow(radius: 5)
+            .padding(.init(top: 15, leading: 15, bottom: 0, trailing: 15))
         }
     }
 }

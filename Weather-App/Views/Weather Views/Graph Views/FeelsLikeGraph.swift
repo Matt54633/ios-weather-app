@@ -12,28 +12,30 @@ struct FeelsLikeGraph: View {
     let hourData: Slice<Forecast<HourWeather>>.Element
     
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                Image(systemName: "thermometer.medium")
-                    .symbolRenderingMode(.palette)
-                    .foregroundStyle(.red, .white)
-                Text("Feels Like")
-            }
-            Spacer()
-            Text("\(hourData.apparentTemperature.value.rounded(.toNearestOrEven).formatted())°")
-                .font(.system(size: 44))
-                .fontWeight(.semibold)
+        HStack {
+            Image(systemName: "thermometer.medium")
+                .symbolRenderingMode(.palette)
+                .foregroundStyle(.red, .white)
+            Text("Feels Like")
             Spacer()
             Group {
                 if hourData.apparentTemperature.value.rounded(.toNearestOrEven) > hourData.temperature.value.rounded(.toNearestOrEven) {
-                    Text("Warmer than actual temperature")
+                    Image(systemName: "chevron.up")
+                        .foregroundStyle(.yellow)
+                        .fontWeight(.bold)
                 } else if hourData.apparentTemperature.value.rounded(.toNearestOrEven) < hourData.temperature.value.rounded(.toNearestOrEven)  {
-                    Text("Cooler than actual temperature")
+                    Image(systemName: "chevron.down")
+                        .foregroundStyle(.green)
+                        .fontWeight(.bold)
                 } else {
-                    Text("Similar to actual temperature")
+                    Image(systemName: "equal")
+                        .foregroundStyle(.white)
+                        .fontWeight(.bold)
                 }
             }
-            .font(.system(size: 14))
+            Text("\(hourData.apparentTemperature.value.rounded(.toNearestOrEven).formatted())°")
+                .font(.title)
+                .fontWeight(.semibold)
         }
         .modifier(GlassCard())
     }

@@ -10,8 +10,8 @@ import CoreLocation
 import WeatherKit
 
 struct WeatherOverview: View {
-    @ObservedObject var weatherDataHelper = WeatherData.shared
-    @ObservedObject var userLocationHelper = LocationManager.shared
+    @StateObject var weatherDataHelper = WeatherData.shared
+    @StateObject var userLocationHelper = LocationManager.shared
     var searchedLocationName: String?
     
     var body: some View {
@@ -27,17 +27,10 @@ struct WeatherOverview: View {
                       
                 Spacer(minLength: 10)
                 Text("\(currentWeather.temperature.value.rounded(.toNearestOrEven).formatted())°")
-                    .font(.system(size: 64))
+                    .font(.system(size: 68))
                     .fontWeight(.semibold)
                 Spacer(minLength: 10)
-                
-                VStack {
-                    Text(currentWeather.condition.description)
-                    if let dailyWeather = weatherDataHelper.dailyForecast {
-                        Text("H:\(dailyWeather[0].highTemperature.value.rounded(.toNearestOrEven).formatted())° | Low:\(dailyWeather[0].lowTemperature.value.rounded(.toNearestOrEven).formatted())°")
-                    }
-                }
-                .font(.headline)
+                WeatherDetailCapsules()
             }
         }
         .fontWeight(.regular)

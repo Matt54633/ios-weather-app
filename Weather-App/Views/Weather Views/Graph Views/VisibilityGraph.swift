@@ -12,19 +12,13 @@ struct VisibilityGraph: View {
     let hourData: Slice<Forecast<HourWeather>>.Element
     
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                Image(systemName: "eye.fill")
-                Text("Visibility")
-            }
-            Spacer()
+        HStack {
+            Image(systemName: "eye.fill")
+            Text("Visibility")
+            Spacer(minLength: 15)
             Text(hourData.visibility.formatted())
-                .font(.system(size: 44))
+                .font(.title)
                 .fontWeight(.semibold)
-            
-            Spacer()
-            Text("\(Int(hourData.cloudCover * 100))% Cloud Cover")
-                .font(.system(size: 14))
         }
         .modifier(GlassCard())
         .modifier(SymbolFill())

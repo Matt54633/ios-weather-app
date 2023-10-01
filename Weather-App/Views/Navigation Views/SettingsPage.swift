@@ -22,7 +22,7 @@ struct SettingsPage: View {
                 Button(action: openSystemSettings) {
                     HStack {
                         Image(systemName: "gear")
-                            .foregroundColor(Color(.darkPurple))
+                            .foregroundColor(Color(.lilac))
                         Text("Open System Settings")
                         Spacer()
                         Image(systemName: "chevron.right")
@@ -30,13 +30,11 @@ struct SettingsPage: View {
                             .fontWeight(.semibold)
                             .font(.system(size: 14))
                     }
-                    .foregroundColor(.black)
                 }
             } header: {
                 Text("Location Services")
             }
         }
-        .modifier(NavigationBar())
         .navigationTitle("Settings")
     }
     

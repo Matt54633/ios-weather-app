@@ -7,8 +7,14 @@
 
 import SwiftUI
 struct ContentView: View {
+    @Environment(\.horizontalSizeClass) var sizeClass
+
     var body: some View {
-        HomePage()
+        if sizeClass == .compact {
+            CompactHomePage()
+        } else {
+            RegularHomePage()
+        }
     }
 }
 

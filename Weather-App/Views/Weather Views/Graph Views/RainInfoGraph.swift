@@ -6,27 +6,26 @@ struct RainInfoGraph: View {
     let dayData: Slice<Forecast<DayWeather>>.Element?
     
     var body: some View {
-        VStack(alignment: .leading) {
             HStack {
                 Image(systemName: "cloud.rain.fill")
-                Text("Rainfall")
-            }
+                if (hourData?.precipitationAmount.value ?? dayData?.precipitationAmount.value)! <= 0 {
+                    Text("Chance of Rain %")
+                } else {
+                    Text("Rainfall")
+                }
             Spacer()
             Text((hourData?.precipitationAmount.value ?? dayData?.precipitationAmount.value)! > 0 ? "\((hourData?.precipitationAmount.value ?? dayData?.precipitationAmount.value)?.formatted() ?? "") mm" : "")
-                .font(.system(size: 44))
+                .font(.title)
                 .fontWeight(.semibold)
             if (hourData?.precipitationAmount.value ?? dayData?.precipitationAmount.value)! <= 0 {
                 Gauge(value: ((hourData?.precipitationChance ?? dayData?.precipitationChance) ?? 0) * 100, in: 0.0...100.0) {
                     Image(systemName: "gauge.medium")
-                        .font(.system(size: 50.0))
+                        .font(.title)
                 } currentValueLabel: {
                     Text("\((Int((hourData?.precipitationChance ?? dayData?.precipitationChance ?? 0) * 100)))")
                 }
                 .gaugeStyle(RainGaugeStyle())
             }
-            Spacer()
-            Text("\(hourData?.precipitationAmount.value ?? dayData?.precipitationAmount.value ?? 0 > 0 ? "Amount of rain" : "Chance of rain")" + "\((hourData != nil ? " for the hour" : " for the day"))")
-                .font(.system(size: 14))
         }
         .modifier(GlassCard())
         .modifier(SymbolFill())

@@ -17,10 +17,11 @@ class WeatherData: ObservableObject {
     @Published var hourlyForecast: Forecast<HourWeather>?
     @Published var dailyForecast: Forecast<DayWeather>?
     @Published var minuteForecast: Forecast<MinuteWeather>?
+    @Published var weatherAlerts: [WeatherKit.WeatherAlert]?
     @Published var attributionURL: URL?
     @Published var attributionLogo: URL?
     @Published var isLoading: Bool = true
-    
+        
     func updateCurrentWeather(userLocation: CLLocation) async {
         self.isLoading = true
         
@@ -30,13 +31,18 @@ class WeatherData: ObservableObject {
                 let forecast = try await self.service.weather(
                     for: userLocation,
                     including: .hourly(startDate: Date(), endDate: oneDayFuture), .daily, .current, .minute, .alerts)
+                let attribution = try await self.service.attribution
                 DispatchQueue.main.async {
                     self.hourlyForecast = forecast.0
                     self.dailyForecast = forecast.1
                     self.currentWeather = forecast.2
                     self.minuteForecast = forecast.3
+                    self.weatherAlerts = forecast.4
+                    self.attributionURL = attribution.legalPageURL
+                    self.attributionLogo = attribution.combinedMarkDarkURL
                     self.isLoading = false
                 }
+                await InsightManager.shared.updateInsights()
             } catch {
                 print(error.localizedDescription)
             }
@@ -58,18 +64,6 @@ class WeatherData: ObservableObject {
         }
         Task.detached { @MainActor in
             await WeatherData.shared.updateCurrentWeather(userLocation: searchLocation)
-        }
-    }
-    
-    func loadAttribution() {
-        Task.detached { @MainActor in
-            do {
-                let attribution = try await self.service.attribution
-                self.attributionURL = attribution.legalPageURL
-                self.attributionLogo = attribution.combinedMarkDarkURL
-            } catch {
-                print("failed to load attribution")
-            }
         }
     }
 }

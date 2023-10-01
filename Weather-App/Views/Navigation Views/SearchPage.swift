@@ -11,17 +11,19 @@ import MapKit
 
 struct SearchPage: View {
     @Environment(\.modelContext) private var context
-    @Environment(\.dismiss) var dismiss
-    
+    @Environment(\.horizontalSizeClass) var sizeClass
     @State private var searchString: String = ""
     @State private var locationNames: [MKPlacemark] = []
     @State private var searchFailed: Bool = false
+    @State private var searchSucceeded: Bool = false
+    @State private var locationNameVar: String = ""
+    @State private var fullLocationNameVar: String = ""
     
     var body: some View {
         List {
             Section {
                 ForEach(locationNames, id: \.self) { location in
-                    LocationRow(placemark: location, searchFailed: $searchFailed) {
+                    LocationRow(placemark: location, searchFailed: $searchFailed, searchSucceeded: $searchSucceeded) {
                         geocode(locationName: location.formattedName, geocodeLocation: location.geocodeLocation)
                     }
                 }
@@ -30,13 +32,13 @@ struct SearchPage: View {
                     .padding(-20)
             }
         }
-        .searchable(text: $searchString, placement: .navigationBarDrawer(displayMode: .always), prompt: "Yeovil, GB")
+        .searchable(text: $searchString, placement: .navigationBarDrawer(displayMode: .always), prompt: "London, GB")
         .autocorrectionDisabled()
         .onChange(of: searchString) {
             searchRequest()
         }
-        .modifier(NavigationBar())
         .navigationTitle("Add Location")
+        .navigationBarTitleDisplayMode(.inline)
     }
     
     func geocode(locationName: String, geocodeLocation: String) {
@@ -46,7 +48,10 @@ struct SearchPage: View {
                 searchFailed = true
             } else if (placemarks?.first) != nil {
                 addLocation(locationName: locationName, fullLocationName: geocodeLocation, context: context)
-                dismiss()
+                searchSucceeded = true
+                
+                locationNameVar = locationName
+                fullLocationNameVar = geocodeLocation
             }
         }
     }
@@ -74,19 +79,23 @@ struct SearchPage: View {
 struct LocationRow: View {
     let placemark: MKPlacemark
     @Binding var searchFailed: Bool
+    @Binding var searchSucceeded: Bool
     let onAdd: () -> Void
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         HStack {
             Text(placemark.formattedFullLocation)
-                .foregroundStyle(.black)
             Spacer()
             Image(systemName: "plus")
-                .foregroundStyle(Color("Dark Purple"))
+                .foregroundStyle(Color(.lilac))
         }
         .onTapGesture(perform: onAdd)
         .alert(isPresented: $searchFailed) {
             Alert(title: Text("Invalid Map Location"), message: Text("Please try refining your search area"), dismissButton: .default(Text("Got it!")))
+        }
+        .alert(isPresented: $searchSucceeded) {
+            Alert(title: Text("Location added successfully"), dismissButton: .default(Text("Got it!"), action: { dismiss() }))
         }
     }
 }
@@ -101,7 +110,7 @@ extension MKPlacemark {
     }
     
     var geocodeLocation: String {
-        [locality, subAdministrativeArea, countryCode].compactMap { $0 }.joined(separator: ", ")
+        [name, postalCode, countryCode].compactMap { $0 }.joined(separator: ", ")
     }
 }
 

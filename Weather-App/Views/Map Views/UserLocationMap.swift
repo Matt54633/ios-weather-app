@@ -10,16 +10,23 @@ import MapKit
 
 struct UserLocationMap: View {
     @State private var position: MapCameraPosition = .userLocation(fallback: .automatic)
+    @StateObject var userLocationHelper = LocationManager.shared
     
     var body: some View {
-        Map(position: $position)
-            .frame(minHeight: 200)
-            .cornerRadius(25)
-            .mapControls {
-                MapUserLocationButton()
-                MapCompass()
+        VStack(alignment: .leading) {
+            if let location = userLocationHelper.placemark?.locality, let countryCode = userLocationHelper.placemark?.isoCountryCode {
+                Text("\(location.uppercased()), \(countryCode.uppercased())")
+                    .modifier(CalloutTextStyle())
             }
-            .tint(Color(.darkPurple))
+            Map(position: $position)
+                .frame(minHeight: 200)
+                .cornerRadius(25)
+                .mapControls {
+                    MapUserLocationButton()
+                    MapCompass()
+                }
+                .tint(Color(.lilac))
+        }
     }
 }
 

@@ -7,12 +7,19 @@
 
 import SwiftUI
 
-struct SelectMap: View {
+struct MapView: View {
+    let isUserLocation: Bool
+    let locationName: String
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        if isUserLocation {
+            UserLocationMap()
+        } else {
+            AddedLocationMap(locationName: locationName)
+        }
     }
 }
 
 #Preview {
-    SelectMap()
+    MapView(isUserLocation: true, locationName: "Yeovil")
 }

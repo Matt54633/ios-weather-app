@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct HourList: View {
+struct CompactHourList: View {
     @StateObject var weatherDataHelper = WeatherData.shared
 
     var body: some View {
@@ -19,7 +19,7 @@ struct HourList: View {
                     HStack {
                         ForEach(hourlyWeather, id: \.self.date) { weatherEntry in
                             NavigationLink {
-                                HourView(hourData: weatherEntry)
+                                CompactHourView(hourData: weatherEntry)
                             } label : {
                                 VStack {
                                     Text(DateFormatter.localizedString(from: weatherEntry.date, dateStyle: .none, timeStyle: .short))
@@ -42,6 +42,6 @@ struct HourList: View {
 
 struct HourList_Previews: PreviewProvider {
     static var previews: some View {
-        HourList()
+        CompactHourList()
     }
 }

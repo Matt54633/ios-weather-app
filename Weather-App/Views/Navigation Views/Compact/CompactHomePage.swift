@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct HomePage: View {
+struct CompactHomePage: View {
     @Environment(\.modelContext) private var context
     @ObservedObject var userLocationHelper = LocationManager.shared
     @Query(sort: \location.creationDate, order: .reverse) private var locations: [location]
@@ -16,7 +16,7 @@ struct HomePage: View {
     private func navigationLinkLabel(imageName: String, text: String) -> some View {
         HStack {
             Image(systemName: imageName)
-                .foregroundStyle(Color("Dark Purple"))
+                .foregroundStyle(Color(.lilac))
             Text(text)
         }
     }
@@ -25,7 +25,7 @@ struct HomePage: View {
         NavigationStack {
             Form {
                 Section {
-                    NavigationLink(destination: WeatherLocation(locationName: "", fullLocationName: "")) {
+                    NavigationLink(destination: CompactWeatherLocation(locationName: "", fullLocationName: "")) {
                         navigationLinkLabel(imageName: "location", text: "Current Location")
                     }
                     NavigationLink(destination: FullMap()) {
@@ -48,7 +48,7 @@ struct HomePage: View {
                         List {
                             ForEach(locations) { location in
                                 NavigationLink(
-                                    destination: WeatherLocation(locationName: location.locationName, fullLocationName: location.fullLocationName)
+                                    destination: CompactWeatherLocation(locationName: location.locationName, fullLocationName: location.fullLocationName)
                                 ) {
                                     navigationLinkLabel(imageName: "building.2.crop.circle", text: location.locationName)
                                 }
@@ -72,7 +72,6 @@ struct HomePage: View {
                     Text("Preferences")
                 }
             }
-            .modifier(NavigationBar())
             .navigationTitle("Home")
         }
         .onAppear {
@@ -83,6 +82,6 @@ struct HomePage: View {
 
 struct HomePage_Previews: PreviewProvider {
     static var previews: some View {
-        HomePage()
+        CompactHomePage()
     }
 }

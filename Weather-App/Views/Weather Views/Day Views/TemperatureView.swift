@@ -8,11 +8,16 @@
 import SwiftUI
 
 struct TemperatureView: View {
+    let highTemperature: Double
+    let lowTemperature: Double
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack(alignment: .leading) {
+            Text("\(highTemperature.rounded(.toNearestOrEven).formatted())°")
+                .font(.system(size: 64))
+            Text("\(lowTemperature.rounded(.toNearestOrEven).formatted())°")
+                .font(.system(size: 40))
+        }
+        .fontWeight(.semibold)
     }
-}
-
-#Preview {
-    TemperatureView()
 }

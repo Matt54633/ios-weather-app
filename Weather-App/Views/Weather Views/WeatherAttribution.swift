@@ -9,7 +9,7 @@ import SwiftUI
 import WeatherKit
 
 struct WeatherAttribution: View {
-    @ObservedObject var weatherDataHelper = WeatherData.shared
+    @StateObject var weatherDataHelper = WeatherData.shared
     
     var body: some View {
         VStack {
@@ -29,9 +29,6 @@ struct WeatherAttribution: View {
                         .underline()
                 })
             }
-        }
-        .onAppear {
-            weatherDataHelper.loadAttribution()
         }
     }
 }

@@ -15,6 +15,7 @@ struct FullMap: View {
         VStack {
             Map(position: $position)
                 .ignoresSafeArea(.all)
+                .tint(Color(.lilac))
         }
         .toolbarBackground(.hidden, for: .navigationBar)
     }

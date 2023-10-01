@@ -13,26 +13,20 @@ struct UVGraph: View {
     let dayData: Slice<Forecast<DayWeather>>.Element?
     
     var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                Image(systemName: "thermometer.sun.fill")
-                Text("UV Index")
-            }
-            Spacer()
+        HStack {
+            Image(systemName: "thermometer.sun.fill")
+            Text("UV")
+            Spacer(minLength: 50)
             if let uvValue = hourData?.uvIndex.value ?? dayData?.uvIndex.value {
-                HStack {
-                    Text(uvValue.formatted())
-                        .font(.system(size: 44))
-                        .fontWeight(.semibold)
-                    Spacer()
-                    Text("")
-                }
-                Spacer()
                 Gauge(value: Double(uvValue), in: 0.0...12.0) {
                     Text("UV")
                 }
+                .frame(maxWidth: 125 )
                 .gaugeStyle(.accessoryLinear)
-                .tint(LinearGradient(colors: [.green, .orange, .red], startPoint: .leading, endPoint: .trailing))
+                .tint(Color(.transparent))
+                Text(uvValue.formatted())
+                    .font(.title)
+                    .fontWeight(.semibold)
             } else {
                 Text("No UV data available")
                     .foregroundColor(.gray)
