@@ -25,19 +25,28 @@ struct RainGraph: View {
                                 ForEach(minuteForecast [0...60], id: \.self.date) { minute in
                                     let precipitationValue = minute.precipitationIntensity.value
                                     let minuteValue = minute.date
-                                    BarMark(
-                                        x: .value("Minute", minuteValue),
-                                        y: .value("Precipitation", precipitationValue),
-                                        width: 3
-                                    )
-                                    .cornerRadius(10)
+                                    if sizeClass == .compact {
+                                        BarMark(
+                                            x: .value("Minute", minuteValue),
+                                            y: .value("Precipitation", precipitationValue),
+                                            width: 3
+                                        )
+                                        .cornerRadius(10)
+                                    } else {
+                                        BarMark(
+                                            x: .value("Minute", minuteValue),
+                                            y: .value("Precipitation", precipitationValue),
+                                            width: 6
+                                        )
+                                        .cornerRadius(10)
+                                    }
                                 }
                             }
                             .padding(EdgeInsets(top: 6, leading: 0, bottom: 0, trailing: 0))
                             .frame(height: 70)
                             .chartXAxis {
                                 AxisMarks(values: .automatic) { _ in
-                                    AxisTick(stroke: StrokeStyle(lineWidth: 2))
+                                    AxisTick(stroke: StrokeStyle(lineWidth: 3))
                                         .foregroundStyle(Color("Transparent"))
                                     AxisValueLabel()
                                         .foregroundStyle(.white)

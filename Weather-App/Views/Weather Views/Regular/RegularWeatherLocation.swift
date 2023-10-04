@@ -28,7 +28,7 @@ struct RegularWeatherLocation: View {
                         WeatherOverview(searchedLocationName: locationName)
                         Spacer(minLength: 50)
                         VStack(alignment: .leading) {
-                            HStack {
+                            VStack {
                                 AlertWarning()
                                 Spacer(minLength: 20)
                                 RainGraph()

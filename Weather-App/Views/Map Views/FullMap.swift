@@ -16,6 +16,10 @@ struct FullMap: View {
             Map(position: $position)
                 .ignoresSafeArea(.all)
                 .tint(Color(.lilac))
+                .mapControls {
+                    MapUserLocationButton()
+                    MapCompass()
+                }
         }
         .toolbarBackground(.hidden, for: .navigationBar)
     }
