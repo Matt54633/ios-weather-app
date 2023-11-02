@@ -52,14 +52,7 @@ struct RainGraph: View {
                                         .foregroundStyle(.white)
                                 }
                             }
-                            .chartYAxis {
-                                AxisMarks(values: .automatic(desiredCount: 4)) { _ in
-                                    AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5, dash: [3, 2]))
-                                        .foregroundStyle(Color("Transparent"))
-                                    AxisValueLabel()
-                                        .foregroundStyle(.white)
-                                }
-                            }
+                            .chartYAxis(.hidden)
                             .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.mint, .cyan]), startPoint: .top, endPoint: .bottom))
                         }
                         .modifier(GlassCard())
